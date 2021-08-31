@@ -1,7 +1,15 @@
 @import url("https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.css");
 @import url("https://fonts.googleapis.com/css2?family=Karla:wght@300;500&display=swap");
+
 @import "./components/header.css";
 @import "./components/main.css";
+@import "./components//footer.css";
+
+@font-face {
+    font-family: "Quentin";
+    src: url("/font/Quentin.otf") format("opentype");
+    font-style: normal;
+}
 
 * {
     box-sizing: border-box;
@@ -34,12 +42,10 @@ body {
 }
 body {
     font-size: 1.6rem;
-    font-family: "Noto Sans KR";
     font-weight: 300;
     line-height: 1.5;
     margin: 0;
     padding: 0;
-    height: auto;
     overflow: hidden;
     letter-spacing: -0.06rem;
     color: #111;

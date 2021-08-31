@@ -5,49 +5,96 @@ const prevArrow = document.getElementById("main__prevArrow");
 const nextArrow = document.getElementById("main__nextArrow");
 const prevArrowImgs = document.querySelectorAll("#main__prevArrow img");
 const nextArrowImgs = document.querySelectorAll("#main__nextArrow img");
+const right = document.querySelector(".main__right");
+const rightMessage = right.querySelector(".main__message");
 
-let slideIndex = 1;
-let slideHeight = window.innerWidth <= 1700 ? 126 : 141;
+let index = 1;
+let slideHeight =
+    window.innerWidth <= 1700
+        ? window.innerWidth <= 1580
+            ? window.innerWidth <= 1430
+                ? window.innerWidth <= 1280
+                    ? 61
+                    : 69
+                : 79
+            : 90
+        : 112;
 let clicked = false;
 
-slider.style.transform = `translateY(-${slideHeight * slideIndex}px)`;
+const messageList = [
+    "Intelligence",
+    "Information",
+    "Facts",
+    "News",
+    "Report",
+    "Message",
+    "Notic",
+    "Knowledge",
+    "Data",
+    "Intelligence",
+    "Information",
+];
+
+const TO_RIGHT = "toRight 0.6s ease forwards";
+const FROM_RIGHT = "fromRight 0.6s ease forwards";
+
+slider.style.transform = `translateY(-${slideHeight * index}px)`;
+rightMessage.innerText = messageList[index];
 
 const TIME_INTERVAL = 5000;
 
 const resizeHandler = () => {
-    if (window.innerWidth <= 1700) {
-        slideHeight = 126;
-    } else if (window.innerWidth > 1700) {
-        slideHeight = 141;
-    }
+    slideHeight =
+        window.innerWidth <= 1700
+            ? window.innerWidth <= 1580
+                ? window.innerWidth <= 1430
+                    ? window.innerWidth <= 1280
+                        ? 61
+                        : 69
+                    : 79
+                : 90
+            : 112;
     slider.style.transition = "0.5s";
-    slider.style.transform = `translateY(-${slideHeight * (slideIndex + 1)}px)`;
+    slider.style.transform = `translateY(-${slideHeight * (index + 1)}px)`;
 };
 
-// 슬라이드
 const slideHandler = () => {
     slider.style.transition = "0.5s";
-    slider.style.transform = `translateY(-${slideHeight * (slideIndex + 1)}px)`;
-    slideIndex++;
+    slider.style.transform = `translateY(-${slideHeight * (index + 1)}px)`;
+    index++;
 
-    if (slideIndex === 10) {
+    if (index === 10) {
         setTimeout(() => {
             slider.style.transition = "0s";
             slider.style.transform = `translateY(-${slideHeight}px)`;
         }, 501);
-        slideIndex = 1;
+        index = 1;
     }
 };
 
-const animationHandler = () => {
-    slideHandler();
+const rightAnimationHandler = () => {
+    right.style.animation = TO_RIGHT;
+    // 이미 index 변화
+    setTimeout(() => {
+        rightMessage.innerText = messageList[index];
+        right.style.animation = FROM_RIGHT;
+    }, 600);
+};
+
+const resetFillbar = () => {
     fill.classList.add("wait");
     void fill.offsetWidth;
     fill.classList.remove("wait");
 };
 
+const timeoutHandler = () => {
+    slideHandler();
+    rightAnimationHandler();
+    resetFillbar();
+};
+
 let id = setInterval(() => {
-    animationHandler();
+    timeoutHandler();
 }, TIME_INTERVAL);
 
 const leftBtnClickHandler = () => {
@@ -64,7 +111,7 @@ const leftBtnClickHandler = () => {
         nextArrow.classList.remove("visible");
         clicked = false;
         id = setInterval(() => {
-            animationHandler();
+            timeoutHandler();
         }, TIME_INTERVAL);
     }
 };
@@ -112,27 +159,25 @@ const prevArrowClickHandler = () => {
     fill.classList.remove("wait");
     fill.style.animationPlayState = "running";
 
-    if (slideIndex === 1) {
+    if (index === 1) {
         console.log("맨 처음");
         slider.style.transition = "0.5s";
         slider.style.transform = "translateY(0px)";
-        slideIndex = 9;
+        index = 9;
         setTimeout(() => {
             slider.style.transition = "0s";
-            slider.style.transform = `translateY(-${
-                slideHeight * slideIndex
-            }px)`;
+            slider.style.transform = `translateY(-${slideHeight * index}px)`;
         }, 501);
         return;
     }
     slider.style.transition = "0.5s";
-    slider.style.transform = `translateY(-${slideHeight * (slideIndex - 1)}px)`;
-    slideIndex--;
+    slider.style.transform = `translateY(-${slideHeight * (index - 1)}px)`;
+    index--;
 };
 const nextArrowClickHandler = () => {
     clearInterval(id);
     console.log("다음");
-    animationHandler();
+    timeoutHandler();
     fill.style.animationPlayState = "running";
 };
 
